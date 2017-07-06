@@ -1,0 +1,10 @@
+version: '2'
+services:
+  django:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_ALLOWED_HOSTS=localhost,sci-nix-029
+

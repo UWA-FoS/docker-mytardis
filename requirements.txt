@@ -1,0 +1,6 @@
+# django-jasmine
+-e git+https://github.com/Aquasys/django-jasmine.git#egg=django-jasmine
+django-registration-redux
+# django-tastypie
+-e git+https://github.com/grischa/django-tastypie.git@mytardis-dj1.7#egg=django-tastypie
+django-tastypie-swagger
