@@ -1,0 +1,4 @@
+[submodule "src/mytardis"]
+	path = src/mytardis
+	url = https://github.com/mytardis/mytardis.git
+	branch = 3.7
