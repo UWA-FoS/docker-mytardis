@@ -7,4 +7,8 @@ services:
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_ALLOWED_HOSTS=localhost,sci-nix-029
+      - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA] "
+      - MYTARDIS_SITE_TITLE=MyTardisUWA
+    env_file:
+      - env.DJANGO_EMAIL
 
