@@ -16,9 +16,12 @@ services:
       - env.DJANGO_EMAIL
     links:
       - db
+      - rabbitmq
   db:
     image: postgres
     environment:
       - DB_NAME=mytardis-dev
     volumes:
       - db:/var/lib/postgresql
+  rabbitmq:
+    image: rabbitmq:3-management

@@ -38,4 +38,7 @@ RUN ln -s mytardis.py manage.py
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY settings.py tardis/
+RUN pip install --no-cache-dir django-celery
+
+COPY settings.py tardis/settings.d/
+COPY docker-entrypoint.d/ docker-entrypoint.d/
