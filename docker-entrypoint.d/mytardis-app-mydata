@@ -1,0 +1,3 @@
+# https://github.com/mytardis/mytardis-app-mydata
+echo 'python mytardis.py loaddata tardis/apps/mydata/fixtures/default_experiment_schema.json'
+python mytardis.py loaddata tardis/apps/mydata/fixtures/default_experiment_schema.json

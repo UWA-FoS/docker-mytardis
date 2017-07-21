@@ -38,7 +38,21 @@ RUN ln -s mytardis.py manage.py
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --no-cache-dir django-celery
+RUN pip install --no-cache-dir \
+  django-celery \
+  psycopg2
 
-COPY settings.py tardis/settings.d/
-COPY docker-entrypoint.d/ docker-entrypoint.d/
+RUN pip install --no-cache-dir -r tardis/apps/publication_forms/requirements.txt
+
+# mytardis-app-mydata
+# https://github.com/mytardis/mytardis-app-mydata
+COPY src/mydata ./tardis/apps/mydata/
+RUN pip install --no-cache-dir -r ./tardis/apps/mydata/requirements.txt
+
+#RUN pip install --no-cache-dir -r tardis/apps/push_to/requirements.txt
+
+COPY docker-entrypoint.d/ /docker-entrypoint.d/
+
+COPY settings.d/ ./settings.d/
+
+ENV MYTARDIS_DEFAULT_INSTITUTION='The University of Western Australia'

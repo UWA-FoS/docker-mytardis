@@ -1,0 +1,2 @@
+echo 'python manage.py createcachetable default_cache'
+python manage.py createcachetable default_cache

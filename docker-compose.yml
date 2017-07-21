@@ -10,10 +10,14 @@ services:
       - DJANGO_DEBUG=True
       - DJANGO_ALLOWED_HOSTS=['localhost','sci-nix-029']
       - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA] "
+      - DJANGO_DATETIME_FORMAT='jS F Y H:i'
+      - DJANGO_DATE_FORMAT='jS F Y'
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_SITE_TITLE=MyTardisUWA
     env_file:
       - env.DJANGO_EMAIL
+      - env.MYTARDIS_LDAP
+      - MYTARDIS_VERSION
     links:
       - db
       - rabbitmq

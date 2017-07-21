@@ -1,1 +1,5 @@
+echo 'python manage.py migrate djcelery'
 python manage.py migrate djcelery
+
+echo 'python manage.py createcachetable celery_lock_cache'
+python manage.py createcachetable celery_lock_cache
