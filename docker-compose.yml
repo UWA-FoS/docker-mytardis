@@ -5,18 +5,20 @@ services:
   django:
     build: .
     ports:
-      - "8000:8000"
+      - '8000:8000'
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_ALLOWED_HOSTS=['localhost','sci-nix-029']
-      - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA] "
+      - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA]"
       - DJANGO_DATETIME_FORMAT='jS F Y H:i'
       - DJANGO_DATE_FORMAT='jS F Y'
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_SITE_TITLE=MyTardisUWA
+      - MYTARDIS_RAPID_CONNECT_ENABLED=True
     env_file:
       - env.DJANGO_EMAIL
       - env.MYTARDIS_LDAP
+      - env.RAPID_CONNECT_CONFIG
       - MYTARDIS_VERSION
     links:
       - db

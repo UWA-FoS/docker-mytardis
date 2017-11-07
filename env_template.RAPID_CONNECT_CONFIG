@@ -1,0 +1,13 @@
+# Registration URL:           https://rapid.aaf.edu.au/registration
+# Registration URL (Testing): https://rapid.test.aaf.edu.au/registration
+# Organisation: The University of Western Australia
+# Name:         MyTardisUWA
+# URL:          https://mytardis.science.uwa.edu.au/rc
+# Callback URL: https://mytardis.science.uwa.edu.au/rc/auth/jwt
+# Secret:       LC_CTYPE=C tr -dc '[[:alnum:][:punct:]]' < /dev/urandom | head -c32 ;echo
+
+RAPID_CONNECT_SECRET='*** Generate with bash code above ***'
+RAPID_CONNECT_AUTHNREQUEST_URL='*** Provided by AAF after registration (approx. eta: 2 days) ***'
+RAPID_CONNECT_ISS='https://rapid.test.aaf.edu.au'
+# RAPID_CONNECT_ISS='https://rapid.aaf.edu.au'
+RAPID_CONNECT_AUD='http://************/rc'
