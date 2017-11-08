@@ -1,0 +1,12 @@
+# https://docs.djangoproject.com/en/1.11/topics/email/
+
+EMAIL_HOST          = 'smtp.example.com'
+EMAIL_PORT          = 25
+EMAIL_HOST_USER     = '<user>'
+EMAIL_HOST_PASSWORD = '<password>'
+EMAIL_USE_TLS       = False
+EMAIL_USE_SSL       = False
+EMAIL_TIMEOUT       = 30
+EMAIL_SSL_KEYFILE   = '<ssl_keyfile>'
+EMAIL_SSL_CERTFILE  = '<ssl_certifile>'
+EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'

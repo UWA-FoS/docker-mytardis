@@ -51,6 +51,10 @@ RUN pip install --no-cache-dir -r ./tardis/apps/mydata/requirements.txt
 
 #RUN pip install --no-cache-dir -r tardis/apps/push_to/requirements.txt
 
+# MyTardis LDAP authentication
+RUN pip install --no-cache-dir \
+  python-ldap==2.4.45
+
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
 COPY settings.d/ ./settings.d/

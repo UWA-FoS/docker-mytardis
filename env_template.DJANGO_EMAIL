@@ -1,0 +1,13 @@
+# https://docs.djangoproject.com/en/1.11/topics/email/
+
+DJANGO_EMAIL_HOST=smtp.example.com
+DJANGO_EMAIL_PORT=25
+DJANGO_EMAIL_HOST_USER=<user>
+DJANGO_EMAIL_HOST_PASSWORD=<password>
+DJANGO_EMAIL_USE_SSL=False
+DJANGO_EMAIL_USE_TLS=False
+DJANGO_EMAIL_TIMEOUT=30
+DJANGO_EMAIL_SSL_KEYFILE=<ssl_keyfile.pem>
+DJANGO_EMAIL_SSL_CERTFILE=<ssl_certfile.pem>
+
+DJANGO_EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend

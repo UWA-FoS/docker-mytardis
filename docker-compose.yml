@@ -1,19 +1,24 @@
 version: '2'
 volumes:
   db:
+  staging:
+  static:
+  store:
 services:
   django:
     build: .
     ports:
-      - '8000:8000'
+      - '127.0.0.1:8000:8000'
     environment:
       - DJANGO_DEBUG=True
+      - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]
       - DJANGO_ALLOWED_HOSTS=['localhost','sci-nix-029']
-      - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA]"
+      - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA]:"
       - DJANGO_DATETIME_FORMAT='jS F Y H:i'
       - DJANGO_DATE_FORMAT='jS F Y'
+      - DJANGO_DEFAULT_FROM_EMAIL='mytardis-cmca@uwa.edu.au'
       - GUNICORN_WORKER_CLASS=gevent
-      - MYTARDIS_SITE_TITLE=MyTardisUWA
+      - MYTARDIS_SITE_TITLE=MyTardisUWADev
       - MYTARDIS_RAPID_CONNECT_ENABLED=True
     env_file:
       - env.DJANGO_EMAIL
@@ -23,6 +28,10 @@ services:
     links:
       - db
       - rabbitmq
+    volumes:
+      - staging:/usr/src/app/var/staging
+      - static:/usr/src/app/static
+      - store:/usr/src/app/var/store
   db:
     image: postgres
     environment:

@@ -1,0 +1,13 @@
+# These settings are common for an Active Directory backend
+
+MYTARDIS_LDAP_ADMIN_PASSWORD=<admin_password>
+MYTARDIS_LDAP_ADMIN_USER=CN=mytardis,OU=Service Account,OU=People,DC=example,DC=com
+MYTARDIS_LDAP_BASE=DC=example,DC=com
+MYTARDIS_LDAP_GROUP_ATTR_MAP={'description': 'display'}
+MYTARDIS_LDAP_GROUP_BASE=OU=Groups,DC=example,DC=com
+MYTARDIS_LDAP_GROUP_ID_ATTR=ou
+MYTARDIS_LDAP_TLS=False
+MYTARDIS_LDAP_URL=ldaps://ldap.example.com
+MYTARDIS_LDAP_USER_ATTR_MAP={'mail': 'email', 'givenName': 'display', 'sn': 'last_name'}
+MYTARDIS_LDAP_USER_BASE=OU=People,DC=example,DC=com
+MYTARDIS_LDAP_USER_LOGIN_ATTR=uid
