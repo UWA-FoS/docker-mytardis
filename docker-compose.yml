@@ -19,7 +19,7 @@ services:
       - DJANGO_DEFAULT_FROM_EMAIL='mytardis-cmca@uwa.edu.au'
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_SITE_TITLE=MyTardisUWADev
-      - MYTARDIS_RAPID_CONNECT_ENABLED=True
+      - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
       - env.DJANGO_EMAIL
       - env.MYTARDIS_LDAP

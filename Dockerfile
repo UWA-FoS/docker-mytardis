@@ -1,4 +1,4 @@
-FROM dockerdjango_django
+FROM gohitech/django:latest
 MAINTAINER Dean Taylor <dean.taylor@uwa.edu.au>
 
 ENV DJANGO_PROJECT_NAME="tardis"
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get -y install \
 RUN pip install --no-cache-dir \
   anyjson==0.3.3 \
   beautifulsoup4==4.6.0 \
-  billiard==3.5.0.3 \
+  billiard==3.3.0.23 \
   feedparser==5.2.1 \
   flexmock==0.10.2 \
   html5lib==0.999999999 \
