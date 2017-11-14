@@ -24,7 +24,6 @@ services:
       - env.DJANGO_EMAIL
       - env.MYTARDIS_LDAP
       - env.RAPID_CONNECT_CONFIG
-      - MYTARDIS_VERSION
     links:
       - db
       - rabbitmq
