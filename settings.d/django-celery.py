@@ -1,4 +1,7 @@
+# https://pypi.python.org/pypi/django-celery
 import djcelery
+djcelery.setup_loader()
+
 from datetime import timedelta
 
 INSTALLED_APPS += (
@@ -16,4 +19,3 @@ CACHES.update(
         'LOCATION': 'celery_lock_cache',
     }, }
 )
-
