@@ -39,8 +39,6 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN pip install --no-cache-dir \
-  celery==3.1.17 \
-  django-celery \
   psycopg2
 
 RUN pip install --no-cache-dir -r tardis/apps/publication_forms/requirements.txt
