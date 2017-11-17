@@ -8,7 +8,7 @@ services:
   django:
     build: .
     ports:
-      - '127.0.0.1:8000:8000'
+      - '127.0.0.1:8002:8000'
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]
@@ -20,10 +20,6 @@ services:
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_SITE_TITLE=MyTardisUWADev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
-    env_file:
-      - env.DJANGO_EMAIL
-      - env.MYTARDIS_LDAP
-      - env.RAPID_CONNECT_CONFIG
     links:
       - db
       - rabbitmq
