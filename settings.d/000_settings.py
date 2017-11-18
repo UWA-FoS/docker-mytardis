@@ -23,6 +23,7 @@ MIDDLEWARE_CLASSES += (
     'tardis.tardis_portal.auth.token_auth.TokenAuthMiddleware',
 )
 
+ADMINS = []
 DEFAULT_STORAGE_BASE_DIR = os.path.join(BASE_DIR,'var','store')
 FILE_STORE_PATH = DEFAULT_STORAGE_BASE_DIR
 MANAGERS = ADMINS

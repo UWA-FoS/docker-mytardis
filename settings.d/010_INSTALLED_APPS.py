@@ -8,6 +8,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
+    'djcelery',
     'registration',
     'kombu.transport.django',
     'bootstrapform',

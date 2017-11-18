@@ -8,7 +8,7 @@ services:
   django:
     build: .
     ports:
-      - '127.0.0.1:8002:8000'
+      - '127.0.0.1:8005:8000'
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]
@@ -27,11 +27,27 @@ services:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
+  celery:
+    image: mytardis_django
+    command: --loglevel=INFO
+    environment:
+      - CELERY_ENABLE=True
+    links:
+      - db
+      - rabbitmq
+    volumes:
+      - staging:/usr/src/app/var/staging
+      - store:/usr/src/app/var/store
+  other:
+    image: dockerdjango_django
+    command: ["tail","-f","/dev/null",]
+    environment:
+      - GUNICORN_ENABLE=False
   db:
-    image: postgres
+    image: postgres:9.5
     environment:
       - DB_NAME=mytardis-dev
     volumes:
       - db:/var/lib/postgresql
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3
