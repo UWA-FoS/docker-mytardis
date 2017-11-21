@@ -1,0 +1,8 @@
+# Bioformats filter
+# https://github.com/keithschulze/mytardisbf
+[ -z $MYTARDIS_BIOFORMATS_FILTER_ENABLE ] && export MYTARDIS_BIOFORMATS_FILTER_ENABLE='False'
+
+if [[ $MYTARDIS_BIOFORMATS_FILTER_ENABLE == True ]]; then
+  echo 'python manage.py loaddata src/mytardisbf/mytardisbf/fixtures'
+  python manage.py loaddata src/mytardisbf/mytardisbf/fixtures
+fi

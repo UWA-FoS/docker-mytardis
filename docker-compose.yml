@@ -18,8 +18,11 @@ services:
       - DJANGO_DATE_FORMAT='jS F Y'
       - DJANGO_DEFAULT_FROM_EMAIL='mytardis-cmca@uwa.edu.au'
       - GUNICORN_WORKER_CLASS=gevent
+      - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
       - MYTARDIS_SITE_TITLE=MyTardisUWADev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
+    env_file:
+      - env.MYTARDIS_LDAP
     links:
       - db
       - rabbitmq
