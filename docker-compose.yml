@@ -20,9 +20,10 @@ services:
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
       - MYTARDIS_SITE_TITLE=MyTardisUWADev
-      - MYTARDIS_RAPID_CONNECT_ENABLED=False
+      - MYTARDIS_RAPID_CONNECT_ENABLED=True
     env_file:
       - env.MYTARDIS_LDAP
+      - env.RAPID_CONNECT_CONFIG
     links:
       - db
       - rabbitmq
@@ -35,6 +36,7 @@ services:
     command: --loglevel=INFO
     environment:
       - CELERY_ENABLE=True
+      - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
     links:
       - db
       - rabbitmq
