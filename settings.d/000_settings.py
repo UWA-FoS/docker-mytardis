@@ -10,7 +10,6 @@ INSTALLED_APPS += (
     'tastypie',
     'tastypie_swagger',
     'tardis.analytics',
-#    'tardis.apps.mydata',
     'tardis.apps.oaipmh',
     'tardis.apps.publication_forms',
     'tardis.search',
@@ -22,6 +21,8 @@ MIDDLEWARE_CLASSES += (
     'tardis.tardis_portal.logging_middleware.LoggingMiddleware',
     'tardis.tardis_portal.auth.token_auth.TokenAuthMiddleware',
 )
+FILTER_MIDDLEWARE = ()
+POST_SAVE_FILTERS = []
 
 ADMINS = []
 DEFAULT_STORAGE_BASE_DIR = os.path.join(BASE_DIR,'var','store')

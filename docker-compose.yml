@@ -8,21 +8,22 @@ services:
   django:
     build: .
     ports:
-      - '127.0.0.1:8005:8000'
+      - '127.0.0.1:8001:8000'
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]
-      - DJANGO_ALLOWED_HOSTS=['localhost','sci-nix-029']
-      - DJANGO_EMAIL_SUBJECT_PREFIX="[MyTardisUWA]:"
+      - DJANGO_ALLOWED_HOSTS=['localhost',]
+      - DJANGO_EMAIL_SUBJECT_PREFIX="[TruDat.UWA]:"
       - DJANGO_DATETIME_FORMAT='jS F Y H:i'
       - DJANGO_DATE_FORMAT='jS F Y'
-      - DJANGO_DEFAULT_FROM_EMAIL='mytardis-cmca@uwa.edu.au'
+      - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat@uwa.edu.au'
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
-      - MYTARDIS_SITE_TITLE=MyTardisUWADev
-      - MYTARDIS_RAPID_CONNECT_ENABLED=True
+      - MYTARDIS_SITE_TITLE=TruDat.UWA_Dev
+      - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
       - env.MYTARDIS_LDAP
+      - env.POSTGRES
       - env.RAPID_CONNECT_CONFIG
     links:
       - db
@@ -31,12 +32,15 @@ services:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
+      - ./src/authentication.py:/usr/src/app/tardis/tardis_portal/views/authentication.py
   celery:
     image: mytardis_django
     command: --loglevel=INFO
     environment:
       - CELERY_ENABLE=True
       - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
+    env_file:
+      - env.POSTGRES
     links:
       - db
       - rabbitmq
@@ -44,14 +48,16 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-    image: dockerdjango_django
+    image: mytardis_django
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False
   db:
     image: postgres:9.5
     environment:
-      - DB_NAME=mytardis-dev
+      - POSTGRES_INITDB_ARGS=--data-checksums --locale=en_US.utf8
+    env_file:
+      - env.POSTGRES
     volumes:
       - db:/var/lib/postgresql
   rabbitmq:

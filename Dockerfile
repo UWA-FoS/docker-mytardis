@@ -1,5 +1,5 @@
-FROM gohitech/django:djcelery
-#FROM dockerdjango_django:latest
+#FROM gohitech/django:djcelery
+FROM dockerdjango_django:latest
 MAINTAINER Dean Taylor <dean.taylor@uwa.edu.au>
 
 ENV DJANGO_PROJECT_NAME="tardis"
@@ -63,7 +63,11 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 RUN  pip install -U --no-cache-dir \
     numpy
 RUN pip install --no-cache-dir -e git+https://github.com/keithschulze/mytardisbf.git@0.1.1#egg=mytardisbf
-ENV MYTARDIS_BIOFORMATS_FILTER_ENABLE='False'
+ENV MYTARDIS_BIOFORMATS_ENABLE='False'
+
+# https://pypi.python.org/pypi/django-generate-secret-key/1.0.2
+RUN pip install --no-cache-dir \
+  django-generate-secret-key==1.0.2
 
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
