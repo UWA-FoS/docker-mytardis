@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export GIT_EXEC_PATH='src/mytardis/'
+#export GIT_DIR='./src/mytardis/.git/'
+cd './src/mytardis/'
 
 commit_id="$(git log -1 --format='%H')"
 date="$(git log -1 --format='%cd' --date=rfc)"

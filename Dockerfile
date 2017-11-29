@@ -75,4 +75,4 @@ COPY settings.d/ ./settings.d/
 
 ENV MYTARDIS_DEFAULT_INSTITUTION='The University of Western Australia'
 
-ENV MYTARDIS_MYTARDIS_VERSION="{'commit_id': '6589ed8a7776deb3e7b4dec1afacfb4f405939a6', 'date': 'Mon, 13 Nov 2017 17:15:51 +0800', 'tag': '', 'branch': 'master'}"
+ENV MYTARDIS_MYTARDIS_VERSION={'commit_id': '0a75a1310e08f28dfa575a23c1da6d0f46e7672a', 'date': 'Thu, 3 Nov 2016 12:22:24 +1100', 'tag': '3.7.8', 'branch': 'HEAD'}
