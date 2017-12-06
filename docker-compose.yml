@@ -19,7 +19,7 @@ services:
       - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat@uwa.edu.au'
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
-      - MYTARDIS_SITE_TITLE=TruDat.UWA_Dev
+      - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
       - env.MYTARDIS_LDAP
@@ -33,9 +33,11 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
       - ./src/authentication.py:/usr/src/app/tardis/tardis_portal/views/authentication.py
+      - ./src/forms.py:/usr/src/app/tardis/tardis_portal/forms.py
+      - ./src/widgets.py:/usr/src/app/tardis/tardis_portal/widgets.py
   celery:
     image: mytardis_django
-    command: --loglevel=INFO
+    command: --loglevel=INFO --autoreload
     environment:
       - CELERY_ENABLE=True
       - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True

@@ -48,7 +48,6 @@ RUN pip install --no-cache-dir -r tardis/apps/publication_forms/requirements.txt
 COPY src/mydata ./tardis/apps/mydata/
 RUN pip install --no-cache-dir -r ./tardis/apps/mydata/requirements.txt
 
-#RUN pip install --no-cache-dir -r tardis/apps/push_to/requirements.txt
 
 # MyTardis LDAP authentication
 RUN pip install --no-cache-dir \
@@ -69,7 +68,12 @@ ENV MYTARDIS_BIOFORMATS_ENABLE='False'
 RUN pip install --no-cache-dir \
   django-generate-secret-key==1.0.2
 
+# push_to
+RUN pip install --no-cache-dir \
+  -r tardis/apps/push_to/requirements.txt
+
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
+COPY docker-entrypoint_celery.d/ /docker-entrypoint_celery.d/
 
 COPY settings.d/ ./settings.d/
 

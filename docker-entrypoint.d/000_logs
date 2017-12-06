@@ -1,0 +1,18 @@
+# tardis.log
+[ -f tardis.log ] && rm -f tardis.log
+if mkfifo tardis.log; then
+ [[ $(stat -c '%U' tardis.log) != ${RUNAS_USER:-root} ]] && chown ${RUNAS_USER:-root} tardis.log
+ tail -f tardis.log &
+fi
+#[ -f tardis.log ] || touch tardis.log
+#[[ $(stat -c '%U' tardis.log) != ${RUNAS_USER:-root} ]] && chown ${RUNAS_USER:-root} tardis.log
+#ln -sf /dev/stdout tardis.log
+# request.log
+[ -f request.log ] && rm -f request.log
+if mkfifo request.log; then
+ [[ $(stat -c '%U' request.log) != ${RUNAS_USER:-root} ]] && chown ${RUNAS_USER:-root} request.log
+ tail -f request.log &
+fi
+#[ -f request.log ] || touch request.log
+#[[ $(stat -c '%U' request.log) != ${RUNAS_USER:-root} ]] && chown ${RUNAS_USER:-root} request.log
+#ln -sf /dev/stdout request.log
