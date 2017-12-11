@@ -9,4 +9,5 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'tardis.tardis_portal.logging_middleware.LoggingMiddleware',
     'tardis.tardis_portal.auth.token_auth.TokenAuthMiddleware',
+    'tardis.tardis_portal.filters.FilterInitMiddleware',
 )
