@@ -18,7 +18,7 @@ services:
       - DJANGO_DATE_FORMAT='jS F Y'
       - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat@uwa.edu.au'
       - GUNICORN_WORKER_CLASS=gevent
-      - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
+      - MYTARDIS_BIOFORMATS_ENABLE=True
       - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
@@ -40,7 +40,7 @@ services:
     command: --loglevel=INFO --autoreload
     environment:
       - CELERY_ENABLE=True
-      - MYTARDIS_BIOFORMATS_FILTER_ENABLE=True
+      - MYTARDIS_BIOFORMATS_ENABLE=True
     env_file:
       - env.POSTGRES
     links:
@@ -61,6 +61,6 @@ services:
     env_file:
       - env.POSTGRES
     volumes:
-      - db:/var/lib/postgresql
+      - db:/var/lib/postgresql/data
   rabbitmq:
     image: rabbitmq:3
