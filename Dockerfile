@@ -73,7 +73,7 @@ RUN pip install --no-cache-dir \
   -r tardis/apps/push_to/requirements.txt
 
 # Bioformats workaround
-# Fix schema check migration timing issue; Bioformats fixture loaded in /docker-compose.d/mytardisbf
+# Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf
 COPY ./src/mytardisbf_apps.py /usr/src/app/src/mytardisbf/mytardisbf/apps.py
 
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
