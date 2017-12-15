@@ -1,5 +1,5 @@
-#FROM gohitech/django:djcelery
-FROM dockerdjango_django:latest
+FROM gohitech/django:djcelery
+#FROM dockerdjango_django:latest
 MAINTAINER Dean Taylor <dean.taylor@uwa.edu.au>
 
 ENV DJANGO_PROJECT_NAME="tardis"
