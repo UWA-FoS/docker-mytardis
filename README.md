@@ -9,7 +9,15 @@
 ```
 $ git clone --recursive https://github.com/UWA-FoS/docker-mytardis.git mytardis
 $ cd mytardis
-edit Dockerfile and/or docker-compose.yml to your desired settings
+```
+
+* rename the relevant env_template.MODULE file removing the "_template" from the name.
+* edit the env.MODULE files with the required settings.
+* template file that are not required, ensure the files are renamed and blank OR remove the relevant entry in the docker-compose.yml file.
+* edit Dockerfile and/or docker-compose.yml to your desired settings / alterations.
+
+
+```
 $ docker-compose up -d
 ```
 

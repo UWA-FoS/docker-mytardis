@@ -1,0 +1,5 @@
+# https://hub.docker.com/_/postgres/
+
+POSTGRES_PASSWORD=exampleonlyNotForProduction
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
