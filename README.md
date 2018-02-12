@@ -13,6 +13,16 @@ edit Dockerfile and/or docker-compose.yml to your desired settings
 $ docker-compose up -d
 ```
 
+This development uses [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to incorporate other code bases into the build process were appropriate, such as the MyTardis source. To work on a different upstream version you should follow "Working on a Project with Submodules", "Pulling in Upstream Changes". E.g.,
+
+```
+To pull the latest upstream changes from MyTardis.
+From the cloned project directory run
+$ cd src/mytardis
+$ git fetch
+$ git merge origin/master
+```
+
 # Configuration
 
 Configuration can be accomplished in a number of different was as circumstance dictates.
