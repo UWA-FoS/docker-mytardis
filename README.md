@@ -21,6 +21,8 @@ From the cloned project directory run
 $ cd src/mytardis
 $ git fetch
 $ git merge origin/master
+$ cd ../..
+$ docker-compose build
 ```
 
 # Configuration
