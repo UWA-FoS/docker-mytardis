@@ -6,6 +6,7 @@ volumes:
   store:
 services:
   django:
+    image: mytardis_django:develop
     build: .
     ports:
       - '127.0.0.1:8001:8000'
@@ -24,6 +25,7 @@ services:
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
       - env.MYTARDIS_LDAP
+      - env.MYTARDIS_VERSION
       - env.POSTGRES
       - env.RAPID_CONNECT_CONFIG
     links:
@@ -33,11 +35,12 @@ services:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
+      - ./src/mytardis/test.py:/usr/src/app/test.py
       - ./src/authentication.py:/usr/src/app/tardis/tardis_portal/views/authentication.py
       - ./src/forms.py:/usr/src/app/tardis/tardis_portal/forms.py
       - ./src/widgets.py:/usr/src/app/tardis/tardis_portal/widgets.py
   celery:
-    image: mytardis_django
+    image: mytardis_django:develop
     command: --loglevel=INFO --autoreload
     environment:
       - CELERY_ENABLE=True
@@ -51,10 +54,15 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-    image: mytardis_django
+    image: mytardis_django:develop
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False
+    volumes:
+      - staging:/usr/src/app/var/staging
+      - static:/usr/src/app/static
+      - store:/usr/src/app/var/store
+      - ./src/mytardis/test.py:/usr/src/app/test.py
   db:
     image: postgres:9.5
     environment:

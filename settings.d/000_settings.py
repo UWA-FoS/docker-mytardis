@@ -33,3 +33,5 @@ MEDIA_URL = None
 METADATA_STORE_PATH = DEFAULT_STORAGE_BASE_DIR
 STAGING_PATH = os.path.join(BASE_DIR,'var','staging')
 TARDIS_APP_ROOT = 'tardis.apps'
+
+DEFAULT_PATH_MAPPER = 'deep-storage'

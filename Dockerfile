@@ -76,6 +76,11 @@ RUN pip install --no-cache-dir \
 # Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf
 COPY ./src/mytardisbf_apps.py /usr/src/app/src/mytardisbf/mytardisbf/apps.py
 
+# MyTardis develop branch
+RUN pip install --no-cache-dir \
+  behave_django \
+  django-npm==1.0.0
+
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 COPY docker-entrypoint_celery.d/ /docker-entrypoint_celery.d/
 
