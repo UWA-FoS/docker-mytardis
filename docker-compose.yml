@@ -17,6 +17,7 @@ services:
       - DJANGO_DATETIME_FORMAT='jS F Y H:i'
       - DJANGO_DATE_FORMAT='jS F Y'
       - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat@uwa.edu.au'
+      - DJANGO_SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO', 'https')
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_BIOFORMATS_ENABLE=True
       - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
