@@ -2,14 +2,31 @@
 
 # Deployment - Docker compose
 
-
-
 # Development
+
+## Dev. MyTardis develop branch
+
+```
+$ git clone -b develop --recursive https://github.com/UWA-FoS/docker-mytardis.git mytardis
+$ cd mytardis
+```
+
+Required to contribute the the MyTardis project.
+
+This will pull all the MyTardis develop branch source and set docker-compose.yml file for the latest UWA develop docker image with prerequisites for testing, etc...
+
+To contribute to the MyTardis project please read the [CONTRIBUTING.rst](https://github.com/mytardis/mytardis/blob/master/CONTRIBUTING.rst).
+
+## Dev. UWA production build.
 
 ```
 $ git clone --recursive https://github.com/UWA-FoS/docker-mytardis.git mytardis
 $ cd mytardis
 ```
+
+Required to add new features and/or settings to the current UWA production MyTardis service.
+
+## General dev. instructions
 
 * rename the relevant env_template.MODULE file removing the "_template" from the name.
 * edit the env.MODULE files with the required settings.
@@ -37,18 +54,45 @@ $ docker-compose build
 
 Configuration can be accomplished in a number of different was as circumstance dictates.
 
+## Docker build settings
+
 * Dockerfile
-* docker-compose.yml
 * docker-entrypoint.d/
+
+  Processed in the Django containers.
+
+  Dump directory for Docker entrypoint bash scripts.
+
+  The scripts are executed in the startup shell (not spawned) and are processed in lexical order.
+
 * docker-entrypoint_celery.d/
-* env.MODULE
+
+  Processed in the Celery containers.
+
+  Dump directory for Docker entrypoint bash scripts.
+
+  The scripts are executed in the startup shell (not spawned) and are processed in lexical order.
+
 * settings.d/
 
-# env.MODULE files
+  Django settings dump directory.
 
-env_template.MODULE templates are provided
+## Docker compose image instantiation settings
+
+* docker-compose.yml
+  * env.MODULE
+
+    Entries to these are placed in the docker-compose.yml file and allow environment settings for container instances/deployments.
+
+    env_template.MODULE templates are provided for examples and reference. Alter the settings for your deployment and rename the files to env.MODULE (remove the _template part of the name).
 
 # References
+
+## Ref. Source
+
+[MyTardis](https://github.com/mytardis/mytardis)
+
+## Ref. Docker
 
 [Django docker container](https://github.com/GoHiTech/docker-django)
 
