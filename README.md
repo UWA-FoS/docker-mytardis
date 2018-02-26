@@ -35,7 +35,16 @@ Required to add new features and/or settings to the current UWA production MyTar
 
 
 ```
-$ docker-compose up -d
+$ docker-compose up -d                 # start docker containers
+$ docker-compose logs --no-color -f    # check logging output
+
+(wait for logging output to stop, usually after a group of lines like this, then interrupt with Ctrl-C:)
+
+        django_1    | [2018-02-26 04:37:36 +0000] [106] [INFO] Booting worker with pid: 106
+        django_1    | [2018-02-26 04:37:36 +0000] [111] [INFO] Booting worker with pid: 111
+        django_1    | [2018-02-26 04:37:36 +0000] [114] [INFO] Booting worker with pid: 114
+
+$ docker-compose exec django python mytardis.py createsuperuser
 ```
 
 This development uses [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to incorporate other code bases into the build process were appropriate, such as the MyTardis source. To work on a different upstream version you should follow "Working on a Project with Submodules", "Pulling in Upstream Changes". E.g.,
@@ -82,7 +91,7 @@ Configuration can be accomplished in a number of different was as circumstance d
 * docker-compose.yml
   * env.MODULE
 
-    Entries to these are placed in the docker-compose.yml file and allow environment settings for container instances/deployments.
+    Entries to these are placed in the docker-compose.yml file [env_file](https://docs.docker.com/compose/environment-variables/#the-env_file-configuration-option) and allow environment settings for container instances/deployments.
 
     env_template.MODULE templates are provided for examples and reference. Alter the settings for your deployment and rename the files to env.MODULE (remove the _template part of the name).
 
