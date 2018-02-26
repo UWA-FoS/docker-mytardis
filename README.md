@@ -47,7 +47,7 @@ $ docker-compose logs --no-color -f    # check logging output
 $ docker-compose exec django python mytardis.py createsuperuser
 ```
 
-Once the startup process has completed point you browser to http://localhost:8001/ and login as root using the credentials they provided to the createsuperuser script above.
+Once the startup process has completed point you browser to http://localhost:8001/ and login using the credentials provided to the createsuperuser script above.
 
 This development uses [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to incorporate other code bases into the build process were appropriate, such as the MyTardis source. To work on a different upstream version you should follow "Working on a Project with Submodules", "Pulling in Upstream Changes". E.g.,
 
