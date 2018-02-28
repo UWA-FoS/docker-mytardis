@@ -35,6 +35,7 @@ Required to add new features and/or settings to the current UWA production MyTar
 
 
 ```
+$ docker-compose pull                  # acquire the latest image from DockerHub
 $ docker-compose up -d                 # start docker containers
 $ docker-compose logs --no-color -f    # check logging output
 
