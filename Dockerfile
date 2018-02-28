@@ -75,6 +75,11 @@ RUN pip install --no-cache-dir \
 # Bioformats workaround
 # Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf
 COPY ./src/mytardisbf_apps.py /usr/src/app/src/mytardisbf/mytardisbf/apps.py
+COPY ./src/forms.py /usr/src/app/tardis/tardis_portal/forms.py
+COPY ./src/widgets.py /usr/src/app/tardis/tardis_portal/widgets.py
+
+# MyTardis code for Pull request
+COPY ./src/authentication.py /usr/src/app/tardis/tardis_portal/views/authentication.py
 
 # MyTardis develop branch
 RUN pip install --no-cache-dir \

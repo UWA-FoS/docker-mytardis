@@ -6,9 +6,8 @@ volumes:
   store:
 services:
   django:
-#    image: mytardis_django:develop
-#    build: .
     image: uwaedu/mytardis_django:develop
+    build: .
     ports:
       - '127.0.0.1:8001:8000'
     environment:
@@ -36,11 +35,7 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
       - ./src/mytardis/test.py:/usr/src/app/test.py
-      - ./src/authentication.py:/usr/src/app/tardis/tardis_portal/views/authentication.py
-      - ./src/forms.py:/usr/src/app/tardis/tardis_portal/forms.py
-      - ./src/widgets.py:/usr/src/app/tardis/tardis_portal/widgets.py
   celery:
-#    image: mytardis_django:develop
     image: uwaedu/mytardis_django:develop
     command: --loglevel=INFO --autoreload
     environment:
@@ -55,7 +50,6 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-#    image: mytardis_django:develop
     image: uwaedu/mytardis_django:develop
     command: ["tail","-f","/dev/null",]
     environment:
