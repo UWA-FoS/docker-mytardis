@@ -69,3 +69,13 @@ services:
       - db:/var/lib/postgresql/data
   rabbitmq:
     image: rabbitmq:3
+  haproxy:
+    image: haproxy:1.7
+    links:
+      - django
+    ports:
+      - '127.0.0.1:8000:8000'
+      - '127.0.0.1:8443:8443'
+    volumes:
+      - ./pki/localhost_chain.pem:/localhost_chain.pem
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
