@@ -24,9 +24,7 @@ services:
       - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
-      - env.MYTARDIS_LDAP
       - env.POSTGRES
-      - env.RAPID_CONNECT_CONFIG
     links:
       - db
       - rabbitmq
@@ -34,7 +32,6 @@ services:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
-      - ./src/mytardis/test.py:/usr/src/app/test.py
   celery:
     image: uwaedu/mytardis_django:develop
     command: --loglevel=INFO --autoreload
