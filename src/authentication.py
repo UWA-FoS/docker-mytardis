@@ -49,8 +49,7 @@ def rcauth(request):
         verified_jwt = jwt.decode(
             request.POST['assertion'],
             settings.RAPID_CONNECT_CONFIG['secret'],
-            audience=settings.RAPID_CONNECT_CONFIG['aud'],
-            leeway=10)
+            audience=settings.RAPID_CONNECT_CONFIG['aud'])
 
         # Check for a replay attack using the jti value.
         jti = verified_jwt['jti']
@@ -87,7 +86,7 @@ def rcauth(request):
                 'email': institution_email.lower(),
                 'password': pwgen.pwgen(),
                 'first_name': first_name,
-                'last_name': request.session['attributes']['surname'],
+                'last_name': request.session['attributes'].get('surname',''),
             }
 
             # Check for an email collision.
