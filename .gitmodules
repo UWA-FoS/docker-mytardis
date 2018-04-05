@@ -4,4 +4,4 @@
 	branch = develop
 [submodule "src/mydata"]
 	path = src/mydata
-	url = https://github.com/wettenhj/mytardis-app-mydata
+	url = https://github.com/mytardis/mytardis-app-mydata.git
