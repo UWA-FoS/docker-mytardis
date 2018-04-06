@@ -9,7 +9,7 @@ services:
     image: uwaedu/mytardis_django:develop
     build: .
     ports:
-      - '127.0.0.1:8001:8000'
+      - '8001:8000'
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]

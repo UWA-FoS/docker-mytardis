@@ -15,6 +15,9 @@ RUN apt-get update && apt-get -y install \
   zlib1g-dev \
   && apt-get clean
 
+RUN pip install --upgrade --no-cache-dir \
+  pip
+
 RUN pip install --no-cache-dir \
   anyjson==0.3.3 \
   beautifulsoup4==4.6.0 \
@@ -35,18 +38,35 @@ COPY src/mytardis/mytardis.py ./
 
 RUN ln -s mytardis.py manage.py
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
+# Based on src/mytardis/build.sh
+COPY requirements-base.txt src/mytardis/requirements-docs.txt src/mytardis/requirements-test.txt ./
 RUN pip install --no-cache-dir \
-  psycopg2
+  -r requirements-base.txt \
+  -r requirements-docs.txt \
+  -r requirements-test.txt
+# from src/mytardis/package.json
+RUN apt-get update && apt-get -y install \
+  npm \
+  && apt-get clean
+RUN npm install \
+  angular@1.3.2 \
+  angular-resource@1.3.2 \
+  ng-dialog@0.3.4
 
-RUN pip install --no-cache-dir -r tardis/apps/publication_forms/requirements.txt
+# UserWarning: The psycopg2 wheel package will be renamed from release 2.8
+# <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>
+RUN pip install --no-cache-dir \
+  psycopg2-binary
+
+# Publication forms
+RUN pip install --no-cache-dir \
+  -r tardis/apps/publication_forms/requirements.txt
 
 # mytardis-app-mydata
 # https://github.com/mytardis/mytardis-app-mydata
 COPY src/mydata ./tardis/apps/mydata/
-RUN pip install --no-cache-dir -r ./tardis/apps/mydata/requirements.txt
+RUN pip install --no-cache-dir \
+  -r ./tardis/apps/mydata/requirements.txt
 
 
 # MyTardis LDAP authentication
@@ -77,14 +97,6 @@ RUN pip install --no-cache-dir \
 COPY ./src/mytardisbf_apps.py /usr/src/app/src/mytardisbf/mytardisbf/apps.py
 COPY ./src/forms.py /usr/src/app/tardis/tardis_portal/forms.py
 COPY ./src/widgets.py /usr/src/app/tardis/tardis_portal/widgets.py
-
-# MyTardis code for Pull request
-COPY ./src/authentication.py /usr/src/app/tardis/tardis_portal/views/authentication.py
-
-# MyTardis develop branch
-RUN pip install --no-cache-dir \
-  behave_django \
-  django-npm==1.0.0
 
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 COPY docker-entrypoint_celery.d/ /docker-entrypoint_celery.d/
