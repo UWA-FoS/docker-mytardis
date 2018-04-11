@@ -6,7 +6,7 @@ volumes:
   store:
 services:
   django:
-    image: uwaedu/mytardis_django:develop
+    image: uwaedu/mytardis_django:dsview-paths
     build: .
     ports:
       - '8001:8000'
@@ -33,7 +33,7 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
   celery:
-    image: uwaedu/mytardis_django:develop
+    image: uwaedu/mytardis_django:dsview-paths
     command: --loglevel=INFO --autoreload
     environment:
       - CELERY_ENABLE=True
@@ -47,7 +47,7 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-    image: uwaedu/mytardis_django:develop
+    image: uwaedu/mytardis_django:dsview-paths
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False
