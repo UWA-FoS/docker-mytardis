@@ -1,6 +1,6 @@
 [submodule "src/mytardis"]
 	path = src/mytardis
-	url = git@github.com:UWA-FoS/trudat.git
+	url = https://github.com/UWA-FoS/trudat.git
 	branch = develop
 [submodule "src/mydata"]
 	path = src/mydata
