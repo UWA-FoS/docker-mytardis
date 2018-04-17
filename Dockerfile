@@ -1,5 +1,4 @@
 FROM gohitech/django:djcelery
-#FROM dockerdjango_django:latest
 MAINTAINER Dean Taylor <dean.taylor@uwa.edu.au>
 
 ENV DJANGO_PROJECT_NAME="tardis"
@@ -68,7 +67,6 @@ COPY src/mydata ./tardis/apps/mydata/
 RUN pip install --no-cache-dir \
   -r ./tardis/apps/mydata/requirements.txt
 
-
 # MyTardis LDAP authentication
 RUN pip install --no-cache-dir \
   python-ldap==2.4.45
@@ -91,9 +89,6 @@ RUN pip install --no-cache-dir \
 # push_to
 RUN pip install --no-cache-dir \
   -r tardis/apps/push_to/requirements.txt
-
-# NIFcert
-COPY src/nifcert/ tardis/apps/nifcert/
 
 # Bioformats workaround
 # Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf

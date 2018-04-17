@@ -24,7 +24,7 @@ services:
       - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
-      - env.POSTGRES
+      - env_template.POSTGRES
     links:
       - db
       - rabbitmq
@@ -32,6 +32,8 @@ services:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
+      - ./src/nifcert:/usr/src/app/tardis/apps/nifcert
+      - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   celery:
     image: uwaedu/mytardis_django:develop
     command: --loglevel=INFO --autoreload
@@ -39,13 +41,15 @@ services:
       - CELERY_ENABLE=True
       - MYTARDIS_BIOFORMATS_ENABLE=True
     env_file:
-      - env.POSTGRES
+      - env_template.POSTGRES
     links:
       - db
       - rabbitmq
     volumes:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
+      - ./src/nifcert:/usr/src/app/tardis/apps/nifcert
+      - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   other:
     image: uwaedu/mytardis_django:develop
     command: ["tail","-f","/dev/null",]
@@ -56,12 +60,14 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
       - ./src/mytardis/test.py:/usr/src/app/test.py
+      - ./src/nifcert:/usr/src/app/tardis/apps/nifcert
+      - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   db:
     image: postgres:9.5
     environment:
       - POSTGRES_INITDB_ARGS=--data-checksums --locale=en_US.utf8
     env_file:
-      - env.POSTGRES
+      - env_template.POSTGRES
     volumes:
       - db:/var/lib/postgresql/data
   rabbitmq:
