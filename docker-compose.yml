@@ -6,7 +6,7 @@ volumes:
   store:
 services:
   django:
-    image: uwaedu/mytardis_django:develop
+    image: uwaedu/mytardis_django:dsview-paths
     build: .
     ports:
       - '8001:8000'
@@ -35,7 +35,7 @@ services:
       - ./src/nifcert:/usr/src/app/tardis/apps/nifcert
       - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   celery:
-    image: uwaedu/mytardis_django:develop
+    image: uwaedu/mytardis_django:dsview-paths
     command: --loglevel=INFO --autoreload
     environment:
       - CELERY_ENABLE=True
@@ -51,7 +51,7 @@ services:
       - ./src/nifcert:/usr/src/app/tardis/apps/nifcert
       - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   other:
-    image: uwaedu/mytardis_django:develop
+    image: uwaedu/mytardis_django:dsview-paths
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False
