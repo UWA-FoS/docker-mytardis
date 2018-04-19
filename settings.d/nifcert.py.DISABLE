@@ -1,8 +1,8 @@
-INSTALLED_APPS += ( 'tardis.apps.nifcert', )
+INSTALLED_APPS += ( 'nifcert', )
 
 POST_SAVE_FILTERS.append(
     (
-        "tardis.apps.nifcert.filters.metadata_filter.make_filter",
+        "nifcert.filters.metadata_filter.make_filter",
         [],
     ),
 )
