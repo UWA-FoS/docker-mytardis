@@ -21,6 +21,7 @@ services:
       - DJANGO_SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO', 'https')
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_BIOFORMATS_ENABLE=True
+      - MYTARDIS_NIFCERT_ENABLE=True
       - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
       - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
@@ -32,14 +33,13 @@ services:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
-      - ./src/nifcert:/usr/src/app/nifcert
-      - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   celery:
     image: uwaedu/mytardis_django:nifcert
     command: --loglevel=INFO --autoreload
     environment:
       - CELERY_ENABLE=True
       - MYTARDIS_BIOFORMATS_ENABLE=True
+      - MYTARDIS_NIFCERT_ENABLE=True
     env_file:
       - env_template.POSTGRES
     links:
@@ -48,8 +48,6 @@ services:
     volumes:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
-      - ./src/nifcert:/usr/src/app/nifcert
-      - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   other:
     image: uwaedu/mytardis_django:nifcert
     command: ["tail","-f","/dev/null",]
@@ -60,8 +58,6 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
       - ./src/mytardis/test.py:/usr/src/app/test.py
-      - ./src/nifcert:/usr/src/app/nifcert
-      - ./settings.d/nifcert.py.DISABLE:/usr/src/app/settings.d/nifcert.py
   db:
     image: postgres:9.5
     environment:

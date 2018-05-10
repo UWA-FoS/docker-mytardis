@@ -90,6 +90,10 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
   -r tardis/apps/push_to/requirements.txt
 
+# nifcert
+COPY ./src/nifcert/ tardis/apps/nifcert/
+ENV MYTARDIS_NIFCERT_ENABLE='False'
+
 # Bioformats workaround
 # Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf
 COPY ./src/mytardisbf_apps.py /usr/src/app/src/mytardisbf/mytardisbf/apps.py
