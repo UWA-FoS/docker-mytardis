@@ -1,7 +1,7 @@
 [submodule "src/mytardis"]
 	path = src/mytardis
 	url = https://github.com/UWA-FoS/trudat.git
-	branch = develop
+	branch = uwa-deploy
 [submodule "src/mydata"]
 	path = src/mydata
 	url = https://github.com/mytardis/mytardis-app-mydata.git

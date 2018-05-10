@@ -91,7 +91,7 @@ RUN pip install --no-cache-dir \
   -r tardis/apps/push_to/requirements.txt
 
 # nifcert
-COPY ./src/nifcert/ tardis/apps/nifcert/
+COPY ./src/nifcert/ nifcert/
 ENV MYTARDIS_NIFCERT_ENABLE='False'
 
 # Bioformats workaround
