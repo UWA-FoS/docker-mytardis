@@ -1,0 +1,84 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: trudat
+  labels:
+    app: trudat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trudat
+  template:
+    metadata:
+      labels:
+        app: trudat
+    spec:
+      containers:
+      - name: django
+        image: uwaedu/mytardis_django:0.1.0
+        ports:
+        - containerPort: 8000
+        env:
+        - { name: "DJANGO_ADMINS",                  value: "[('Dean Taylor','dean.taylor@uwa.edu.au'),]" }
+        - { name: "DJANGO_ALLOWED_HOSTS",           value: "'*'" }
+        - { name: "DJANGO_DATABASES_default_HOST",  value: "localhost" }
+        - { name: "DJANGO_DATETIME_FORMAT",         value: "jS F Y H:i" }
+        - { name: "DJANGO_DATE_FORMAT",             value: "jS F Y" }
+        - { name: "DJANGO_DEBUG",                   value: "True" }
+        - { name: "DJANGO_DEFAULT_FROM_EMAIL",      value: "donotreply-trudat@uwa.edu.au" }
+        - { name: "DJANGO_SECURE_PROXY_SSL_HEADER", value: "('HTTP_X_FORWARDED_PROTO', 'https')" }
+        - { name: "DJANGO_EMAIL_SUBJECT_PREFIX",    value: "TruDat_UWA_Dev" }
+        - { name: "GUNICORN_WORKER_CLASS",          value: "gevent" }
+        - { name: "MYTARDIS_BIOFORMATS_ENABLE",     value: "True" }
+        - { name: "MYTARDIS_NIFCERT_ENABLE",        value: "True" }
+        - { name: "MYTARDIS_SITE_TITLE",            value: "TruDat@UWA_Dev" }
+        - { name: "MYTARDIS_RAPID_CONNECT_ENABLED", value: "False" }
+        - { name: "POSTGRES_PASSWORD",              value: "password" }
+        - { name: "RABBITMQ_HOSTNAME",              value: "localhost" }
+      - name: celery
+        image: uwaedu/mytardis_django:0.1.0
+        args: ["--loglevel=INFO","--autoreload"]
+        env:
+        - { name: "CELERY_ENABLE",                  value: "True" }
+        - { name: "DJANGO_DATABASES_default_HOST",  value: "localhost" }
+        - { name: "MYTARDIS_BIOFORMATS_ENABLE",     value: "True" }
+        - { name: "MYTARDIS_NIFCERT_ENABLE",        value: "True" }
+        - { name: "POSTGRES_PASSWORD",              value: "password" }
+        - { name: "RABBITMQ_HOSTNAME",              value: "localhost" }
+      - name: beat
+        image: uwaedu/mytardis_django:0.1.0
+        args: ["--loglevel=INFO"]
+        env:
+        - { name: "CELERY_ENABLE",                  value: "beat" }
+        - { name: "DJANGO_DATABASES_default_HOST",  value: "localhost" }
+        - { name: "MYTARDIS_BIOFORMATS_ENABLE",     value: "False" }
+        - { name: "MYTARDIS_NIFCERT_ENABLE",        value: "Fale" }
+        - { name: "POSTGRES_PASSWORD",              value: "password" }
+        - { name: "RABBITMQ_HOSTNAME",              value: "localhost" }
+      - name: other
+        image: uwaedu/mytardis_django:0.1.0
+        command: ["tail"]
+        args: ["-f","/dev/null"]
+        env:
+        - { name: "GUNICORN_ENABLE", value: "False" }
+      - name: db
+        image: postgres
+        env:
+        - { name: "POSTGRES_PASSWORD", value: "password" }
+      - name: rabbitmq
+        image: rabbitmq:3
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: trudat-service
+spec:
+  selector:
+    app: trudat
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: LoadBalancer

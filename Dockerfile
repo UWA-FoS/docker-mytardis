@@ -44,13 +44,17 @@ RUN pip install --no-cache-dir \
   -r requirements-docs.txt \
   -r requirements-test.txt
 # from src/mytardis/package.json
-RUN apt-get update && apt-get -y install \
-  npm \
+# https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+  && apt-get update \
+  && apt-get -y install \
+    nodejs \
   && apt-get clean
 RUN npm install \
   angular@1.3.2 \
   angular-resource@1.3.2 \
-  ng-dialog@0.3.4
+  ng-dialog@0.3.4 \
+  && apt-get -y remove nodejs
 
 # UserWarning: The psycopg2 wheel package will be renamed from release 2.8
 # <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>
@@ -73,10 +77,11 @@ RUN pip install --no-cache-dir \
 
 # Bioformats
 # https://github.com/keithschulze/mytardisbf
+#  openjdk-7-jdk \
 RUN apt-get update && apt-get -y install \
-  openjdk-7-jdk \
+  openjdk-8-jdk \
   && apt-get clean
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 RUN  pip install -U --no-cache-dir \
     numpy
 RUN pip install --no-cache-dir -e git+https://github.com/keithschulze/mytardisbf.git@0.1.1#egg=mytardisbf
