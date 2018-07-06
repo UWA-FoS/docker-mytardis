@@ -78,10 +78,11 @@ RUN pip install --no-cache-dir \
 # Bioformats
 # https://github.com/keithschulze/mytardisbf
 #  openjdk-7-jdk \
+#  openjdk-8-jdk \
 RUN apt-get update && apt-get -y install \
-  openjdk-8-jdk \
+  openjdk-7-jdk \
   && apt-get clean
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 RUN  pip install -U --no-cache-dir \
     numpy
 RUN pip install --no-cache-dir -e git+https://github.com/keithschulze/mytardisbf.git@0.1.1#egg=mytardisbf
@@ -98,6 +99,11 @@ RUN pip install --no-cache-dir \
 # nifcert
 COPY ./src/nifcert/ nifcert/
 ENV MYTARDIS_NIFCERT_ENABLE='False'
+
+# Long user name and email address fix for AAF user name registration and student long emails
+RUN pip install --no-cache-dir \
+  django-longerusernameandemail \
+  south
 
 # Bioformats workaround
 # Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf
