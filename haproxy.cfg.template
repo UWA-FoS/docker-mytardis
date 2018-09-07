@@ -10,14 +10,14 @@ defaults
 
 frontend django
   acl network_allowed src 127.0.0.0/8 10.0.0.0/8 192.168.0.0/16 172.16.0.0/12
-  bind :8000
+  acl url_static url_beg /static
+  bind :8080
   bind :8443 ssl crt /localhost_chain.pem
   #http-request deny if !network_allowed
   #http-request redirect location https://localhost:8443 if ! { hdr(host) -i localhost }
   #http-request redirect scheme https if !{ ssl_fc }
   http-request set-header X-Forwarded-Proto https if { ssl_fc }
-  acl url_static url_beg /static
-  #use_backend static if url_static
+  use_backend static if url_static
   default_backend django
   option forwardfor
   option http-server-close
@@ -33,9 +33,9 @@ backend django
   balance roundrobin
   server django django:8000 maxconn 32
 
-#backend static
-#  balance roundrobin
-#  server static static:80 maxconn 32
+backend static
+  balance roundrobin
+  server static static:80 maxconn 32
 
 #backend ssh
 #  mode tcp
