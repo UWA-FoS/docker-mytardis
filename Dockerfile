@@ -92,10 +92,6 @@ ENV MYTARDIS_BIOFORMATS_ENABLE='False'
 RUN pip install --no-cache-dir \
   django-generate-secret-key==1.0.2
 
-# push_to
-RUN pip install --no-cache-dir \
-  -r tardis/apps/push_to/requirements.txt
-
 # nifcert
 COPY ./src/nifcert/ nifcert/
 ENV MYTARDIS_NIFCERT_ENABLE='False'
