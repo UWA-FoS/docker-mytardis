@@ -30,7 +30,6 @@ MAX_IMAGES_IN_CAROUSEL = 100
 MODULE_LOG_FILENAME = 'tardis.log'
 MODULE_LOG_LEVEL = 'INFO'
 MODULE_LOG_MAXBYTES = 0
-MYTARDIS_VERSION = {'commit_id': '', 'date': '', 'tag': '', 'branch': ''}
 OAIPMH_PROVIDERS = ['tardis.apps.oaipmh.provider.experiment.DcExperimentProvider', 'tardis.apps.oaipmh.provider.experiment.RifCsExperimentProvider']
 OAI_DOCS_PATH = os.path.join(BASE_DIR,'var','oai')
 REDIS_VERIFY_DELAY = 86400

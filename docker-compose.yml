@@ -1,67 +1,146 @@
 version: '2'
 volumes:
   db:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/Volumes/swarm/docker-mytardis/volumes/db'
   staging:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/Volumes/swarm/docker-mytardis/volumes/staging'
   static:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/Volumes/swarm/docker-mytardis/volumes/static'
   store:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/Volumes/swarm/docker-mytardis/volumes/store'
 services:
   django:
+    image: uwaedu/mytardis_django:uwa.3.9.0
     build: .
     ports:
-      - '127.0.0.1:8001:8000'
+      - '8001:8000'
     environment:
-      - DJANGO_DEBUG=True
       - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]
-      - DJANGO_ALLOWED_HOSTS=['localhost',]
-      - DJANGO_EMAIL_SUBJECT_PREFIX="[TruDat.UWA]:"
+      - DJANGO_ALLOWED_HOSTS=['trudat-uat.cmca.uwa.edu.au','10.174.0.16','localhost',]
       - DJANGO_DATETIME_FORMAT='jS F Y H:i'
       - DJANGO_DATE_FORMAT='jS F Y'
-      - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat@uwa.edu.au'
+      - DJANGO_DEBUG=False
+      - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat-uat@uwa.edu.au'
+      - DJANGO_EMAIL_SUBJECT_PREFIX="[TruDat@UWA_UAT]:"
+      - DJANGO_LOG_LEVEL=DEBUG
       - DJANGO_SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO', 'https')
       - GUNICORN_WORKER_CLASS=gevent
       - MYTARDIS_BIOFORMATS_ENABLE=True
-      - MYTARDIS_SITE_TITLE=TruDat@UWA_Dev
-      - MYTARDIS_RAPID_CONNECT_ENABLED=False
+      - MYTARDIS_NIFCERT_ENABLE=True
+      - MYTARDIS_SITE_TITLE=TruDat@UWA_UAT
+      - MYTARDIS_RAPID_CONNECT_ENABLED=True
     env_file:
-      - env.MYTARDIS_LDAP
       - env.POSTGRES
-      - env.RAPID_CONNECT_CONFIG
+      - env.RAPID_CONNECT
     links:
       - db
       - rabbitmq
+    mem_limit: 1g
     volumes:
       - staging:/usr/src/app/var/staging
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
-      - ./src/authentication.py:/usr/src/app/tardis/tardis_portal/views/authentication.py
-      - ./src/forms.py:/usr/src/app/tardis/tardis_portal/forms.py
-      - ./src/widgets.py:/usr/src/app/tardis/tardis_portal/widgets.py
   celery:
-    image: mytardis_django
-    command: --loglevel=INFO --autoreload
+    image: uwaedu/mytardis_django:uwa.3.9.0
+    command: --loglevel=DEBUG --autoreload
     environment:
       - CELERY_ENABLE=True
+      - DJANGO_LOG_LEVEL=DEBUG
       - MYTARDIS_BIOFORMATS_ENABLE=True
+      - MYTARDIS_NIFCERT_ENABLE=True
     env_file:
       - env.POSTGRES
     links:
       - db
       - rabbitmq
+    mem_limit: 500m
+    volumes:
+      - staging:/usr/src/app/var/staging
+      - store:/usr/src/app/var/store
+  beat:
+    image: uwaedu/mytardis_django:uwa.3.9.0
+    environment:
+      - CELERY_ENABLE=beat
+      - MYTARDIS_BIOFORMATS_ENABLE=True
+      - MYTARDIS_NIFCERT_ENABLE=True
+    env_file:
+      - env.POSTGRES
+    links:
+      - db
+      - rabbitmq
+    mem_limit: 500m
     volumes:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-    image: mytardis_django
+    image: uwaedu/mytardis_django:uwa.3.9.0
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False
+    mem_limit: 500m
+    volumes:
+      - staging:/usr/src/app/var/staging
+      - static:/usr/src/app/static
+      - store:/usr/src/app/var/store
+      - ./src/mytardis/test.py:/usr/src/app/test.py
   db:
     image: postgres:9.5
     environment:
       - POSTGRES_INITDB_ARGS=--data-checksums --locale=en_US.utf8
+      - PGDATA=/var/lib/postgresql/data/pgdata
     env_file:
       - env.POSTGRES
+    mem_limit: 500m
     volumes:
       - db:/var/lib/postgresql/data
   rabbitmq:
     image: rabbitmq:3
+    mem_limit: 500m
+  static:
+    image: nginx
+    ports:
+      - '8002:80'
+    restart: always
+    volumes:
+      - static:/usr/src/app/static/:ro
+      - ./mysite.template:/etc/nginx/conf.d/mysite.template
+    environment:
+      - NGINX_HOST=trudat-uat-static.cmca.uwa.edu.au
+      - NGINX_PORT=80
+    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    mem_limit: 500m
+  haproxy:
+    image: haproxy:1.8
+    #command: echo "haproxy disabled"
+    command: >
+      /bin/bash -c "
+      apt-get update && apt-get -y install gettext-base;
+      envsubst < /usr/local/etc/haproxy/haproxy.cfg.template > /usr/local/etc/haproxy/haproxy.cfg &&
+      haproxy -f /usr/local/etc/haproxy/haproxy.cfg
+      "
+    links:
+      - django
+    mem_limit: 500m
+    ports:
+      - '127.0.0.1:8080:8080'
+      - '127.0.0.1:8443:8443'
+    restart: 'no'
+    volumes:
+      - ./pki/localhost_chain.pem:/localhost_chain.pem
+      - ./haproxy.cfg.template:/usr/local/etc/haproxy/haproxy.cfg.template

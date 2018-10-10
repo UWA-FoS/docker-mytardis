@@ -1,5 +1,4 @@
 FROM gohitech/django:djcelery
-#FROM dockerdjango_django:latest
 MAINTAINER Dean Taylor <dean.taylor@uwa.edu.au>
 
 ENV DJANGO_PROJECT_NAME="tardis"
@@ -14,6 +13,9 @@ RUN apt-get update && apt-get -y install \
   libxslt1-dev \
   zlib1g-dev \
   && apt-get clean
+
+RUN pip install --upgrade --no-cache-dir \
+  pip
 
 RUN pip install --no-cache-dir \
   anyjson==0.3.3 \
@@ -35,19 +37,39 @@ COPY src/mytardis/mytardis.py ./
 
 RUN ln -s mytardis.py manage.py
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
+# Based on src/mytardis/build.sh
+COPY requirements-base.txt src/mytardis/requirements-docs.txt src/mytardis/requirements-test.txt ./
 RUN pip install --no-cache-dir \
-  psycopg2
+  -r requirements-base.txt \
+  -r requirements-docs.txt \
+  -r requirements-test.txt
+# from src/mytardis/package.json
+# https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+  && apt-get update \
+  && apt-get -y install \
+    nodejs \
+  && apt-get clean
+RUN npm install \
+  angular@1.3.2 \
+  angular-resource@1.3.2 \
+  ng-dialog@0.3.4 \
+  && apt-get -y remove nodejs
 
-RUN pip install --no-cache-dir -r tardis/apps/publication_forms/requirements.txt
+# UserWarning: The psycopg2 wheel package will be renamed from release 2.8
+# <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>
+RUN pip install --no-cache-dir \
+  psycopg2-binary
+
+# Publication forms
+RUN pip install --no-cache-dir \
+  -r tardis/apps/publication_forms/requirements.txt
 
 # mytardis-app-mydata
 # https://github.com/mytardis/mytardis-app-mydata
 COPY src/mydata ./tardis/apps/mydata/
-RUN pip install --no-cache-dir -r ./tardis/apps/mydata/requirements.txt
-
+RUN pip install --no-cache-dir \
+  -r ./tardis/apps/mydata/requirements.txt
 
 # MyTardis LDAP authentication
 RUN pip install --no-cache-dir \
@@ -55,6 +77,8 @@ RUN pip install --no-cache-dir \
 
 # Bioformats
 # https://github.com/keithschulze/mytardisbf
+#  openjdk-7-jdk \
+#  openjdk-8-jdk \
 RUN apt-get update && apt-get -y install \
   openjdk-7-jdk \
   && apt-get clean
@@ -72,15 +96,28 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
   -r tardis/apps/push_to/requirements.txt
 
+# nifcert
+COPY ./src/nifcert/ nifcert/
+ENV MYTARDIS_NIFCERT_ENABLE='False'
+
+# Long user name and email address fix for AAF user name registration and student long emails
+RUN pip install --no-cache-dir \
+  django-longerusernameandemail \
+  south
+
 # Bioformats workaround
 # Fix schema check migration timing issue; Bioformats fixture loaded in /docker-entrypoint.d/mytardisbf
 COPY ./src/mytardisbf_apps.py /usr/src/app/src/mytardisbf/mytardisbf/apps.py
+COPY ./src/forms.py /usr/src/app/tardis/tardis_portal/forms.py
+COPY ./src/widgets.py /usr/src/app/tardis/tardis_portal/widgets.py
 
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 COPY docker-entrypoint_celery.d/ /docker-entrypoint_celery.d/
 
 COPY settings.d/ ./settings.d/
+COPY settings_pre.py ./settings_pre.py
 
 ENV MYTARDIS_DEFAULT_INSTITUTION='The University of Western Australia'
 
-ENV MYTARDIS_MYTARDIS_VERSION="{'commit_id': '0a75a1310e08f28dfa575a23c1da6d0f46e7672a', 'date': 'Thu, 3 Nov 2016 12:22:24 +1100', 'tag': '3.7.8', 'branch': 'HEAD'}"
+RUN pip uninstall -y --no-cache-dir \
+  South
