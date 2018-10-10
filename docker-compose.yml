@@ -1,53 +1,32 @@
-version: '2'
+version: '2.2'
 volumes:
   db:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/Volumes/swarm/docker-mytardis/volumes/db'
   staging:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/Volumes/swarm/docker-mytardis/volumes/staging'
   static:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/Volumes/swarm/docker-mytardis/volumes/static'
   store:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/Volumes/swarm/docker-mytardis/volumes/store'
 services:
   django:
-    image: uwaedu/mytardis_django:uwa.3.9.0
+    image: uwaedu/mytardis_django:3.9.0
     build: .
     ports:
       - '8001:8000'
     environment:
       - DJANGO_ADMINS=[('Dean Taylor','dean.taylor@uwa.edu.au'),]
-      - DJANGO_ALLOWED_HOSTS=['trudat-uat.cmca.uwa.edu.au','10.174.0.16','localhost',]
+      - DJANGO_ALLOWED_HOSTS=['trudat-dev.cmca.uwa.edu.au','10.174.0.16','localhost',]
       - DJANGO_DATETIME_FORMAT='jS F Y H:i'
       - DJANGO_DATE_FORMAT='jS F Y'
-      - DJANGO_DEBUG=False
-      - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat-uat@uwa.edu.au'
-      - DJANGO_EMAIL_SUBJECT_PREFIX="[TruDat@UWA_UAT]:"
+      - DJANGO_DEBUG=True
+      - DJANGO_DEFAULT_FROM_EMAIL='donotreply-trudat-dev@uwa.edu.au'
+      - DJANGO_EMAIL_SUBJECT_PREFIX="[TruDat@UWA_DEV]:"
       - DJANGO_LOG_LEVEL=DEBUG
       - DJANGO_SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO', 'https')
       - GUNICORN_WORKER_CLASS=gevent
-      - MYTARDIS_BIOFORMATS_ENABLE=True
-      - MYTARDIS_NIFCERT_ENABLE=True
-      - MYTARDIS_SITE_TITLE=TruDat@UWA_UAT
-      - MYTARDIS_RAPID_CONNECT_ENABLED=True
+      - MYTARDIS_BIOFORMATS_ENABLE=False
+      - MYTARDIS_NIFCERT_ENABLE=False
+      - MYTARDIS_SITE_TITLE=TruDat@UWA_DEV
+      - MYTARDIS_RAPID_CONNECT_ENABLED=False
     env_file:
       - env.POSTGRES
-      - env.RAPID_CONNECT
     links:
       - db
       - rabbitmq
@@ -57,13 +36,13 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
   celery:
-    image: uwaedu/mytardis_django:uwa.3.9.0
+    image: uwaedu/mytardis_django:3.9.0
     command: --loglevel=DEBUG --autoreload
     environment:
       - CELERY_ENABLE=True
       - DJANGO_LOG_LEVEL=DEBUG
-      - MYTARDIS_BIOFORMATS_ENABLE=True
-      - MYTARDIS_NIFCERT_ENABLE=True
+      - MYTARDIS_BIOFORMATS_ENABLE=False
+      - MYTARDIS_NIFCERT_ENABLE=False
     env_file:
       - env.POSTGRES
     links:
@@ -74,11 +53,11 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   beat:
-    image: uwaedu/mytardis_django:uwa.3.9.0
+    image: uwaedu/mytardis_django:3.9.0
     environment:
       - CELERY_ENABLE=beat
-      - MYTARDIS_BIOFORMATS_ENABLE=True
-      - MYTARDIS_NIFCERT_ENABLE=True
+      - MYTARDIS_BIOFORMATS_ENABLE=False
+      - MYTARDIS_NIFCERT_ENABLE=False
     env_file:
       - env.POSTGRES
     links:
@@ -89,7 +68,7 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-    image: uwaedu/mytardis_django:uwa.3.9.0
+    image: uwaedu/mytardis_django:3.9.0
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False

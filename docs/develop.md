@@ -1,10 +1,9 @@
-h1. Development
+# Development
 
-h2. Setup
-
-[Docker installation CentOS7](https://docs.docker.com/install/linux/docker-ce/centos/)
-[Compose installation](https://docs.docker.com/compose/install/)
-[Compose command completion installation](https://docs.docker.com/compose/completion/)
+## Setup
+* [Docker installation CentOS7](https://docs.docker.com/install/linux/docker-ce/centos/)
+* [Compose installation](https://docs.docker.com/compose/install/)
+* [Compose command completion installation](https://docs.docker.com/compose/completion/)
 
 Instructions taken from above links 26/09/2018; use the above links for the most up to date instructions.
 ```bash
@@ -15,7 +14,6 @@ sudo usermod -aG docker $USER
 ```
 
 log out and back in to add the docker group into your active session
-
 ```bash
 docker run hello-world
 
@@ -34,14 +32,12 @@ sudo curl -L https://raw.githubusercontent.com/docker/compose/1.22.0/contrib/com
 * Ports
 
 For non-root access to development. This ensures that containers running with root privileges that create files can be maintained by the users account permissions on the host.
-
 ```bash
 setfacl -R -m d:u:${USER}:rwX ${HOME}
 setfacl -R -m u:${USER}:rwX ${HOME}
 ```
 
 Ensure directories and especially files are created prior to the docker run process. Docker will create a directory on the host for any volume referenced if it does not already exist.
-
 ```docker-compose.yml
 version '2.2'
 
@@ -80,10 +76,60 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 ```
-
 ```bash
 docker-compose pull
 docker-compose up -d
 docker-compose logs --no-color -f [<container_name>]
 ```
 
+## working on code
+```bash
+git clone --recursive https://github.com/UWA-FoS/docker-mytardis.git
+cd docker-mytardis
+```
+```bash
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+```
+This will clone the MyTardis Docker develoment environment and using the '--recursive' switch the upstream source code will be cloned into the src/ directory using [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules). Care needs to be taken, in that, the git submodules will be cloned in a state called 'Detached Head', to work on this code and submit to the upstream code base you should firstly read the 'Working on a Submodule' section of the referenced documentation.
+
+```bash
+cd src/mytardis
+```
+
+cat ./.gitmodule
+```
+[submodule "src/mytardis"]
+        path = src/mytardis
+        url = https://github.com/mytardis/mytardis.git
+        branch = develop
+[submodule "src/mydata"]
+        path = src/mydata
+        url = https://github.com/mytardis/mytardis-app-mydata.git
+[submodule "src/nifcert"]
+        path = src/nifcert
+        url = https://github.com/UWA-FoS/mytardis-nifcert.git
+```
+```bash
+rm -rf .git/modules/src/mytardis
+rm -rf src/mytardis
+git submodule sync
+git submodule update --init --recursive --remote
+cd src/mytardis
+git checkout develop
+```
+If development is not against the MyTardis upstream development branch or this is for building a particulat tagged release.
+```bash
+git fetch --all --tags --prune
+git checkout tags/v3.9.0 -b v3.9.0
+```
+```bash
+cp env_template.POSTGRES env.POSTGRES
+docker-compose pull
+docker pull uwaedu/mytardis_django
+docker-compose build
+docker-compose up -d
+docker-compose logs --no-color -f
+```
