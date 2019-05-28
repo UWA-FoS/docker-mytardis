@@ -6,7 +6,7 @@ volumes:
   store:
 services:
   django:
-    image: uwaedu/mytardis_django:3.9.0
+    image: uwaedu/mytardis_django:${TAG}
     build: .
     ports:
       - '8001:8000'
@@ -38,7 +38,7 @@ services:
       - static:/usr/src/app/static
       - store:/usr/src/app/var/store
   celery:
-    image: uwaedu/mytardis_django:3.9.0
+    image: uwaedu/mytardis_django:${TAG}
     command: --loglevel=DEBUG --autoreload
     environment:
       - CELERY_ENABLE=True
@@ -56,7 +56,7 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   beat:
-    image: uwaedu/mytardis_django:3.9.0
+    image: uwaedu/mytardis_django:${TAG}
     environment:
       - CELERY_ENABLE=beat
       - MYTARDIS_BIOFORMATS_ENABLE=False
@@ -72,7 +72,7 @@ services:
       - staging:/usr/src/app/var/staging
       - store:/usr/src/app/var/store
   other:
-    image: uwaedu/mytardis_django:3.9.0
+    image: uwaedu/mytardis_django:${TAG}
     command: ["tail","-f","/dev/null",]
     environment:
       - GUNICORN_ENABLE=False
